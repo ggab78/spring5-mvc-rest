@@ -19,15 +19,19 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO findById(Long id) throws Exception {
 
         return customerRepository.findById(id)
-                .map(customer -> CustomerMapper.INSTANCE.customerToCustomerDTO(customer))
-                .orElseThrow(()-> new Exception("User Id"+id+"can not be found"));
+                .map(CustomerMapper.INSTANCE::customerToCustomerDTO)
+                .orElseThrow(()-> new Exception("User Id "+id+" can not be found."));
     }
 
     @Override
     public List<CustomerDTO> findAll() {
         return customerRepository.findAll()
                 .stream()
-                .map(CustomerMapper.INSTANCE::customerToCustomerDTO)
+                .map(customer -> {
+                    CustomerDTO customerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(customer);
+                    customerDTO.setCustomer_url("/api/v1/customers/"+customer.getId());
+                    return customerDTO;
+                })
                 .collect(Collectors.toList());
     }
 }
