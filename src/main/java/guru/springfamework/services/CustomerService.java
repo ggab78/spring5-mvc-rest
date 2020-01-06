@@ -9,4 +9,6 @@ public interface CustomerService {
     CustomerDTO findById(Long id) throws Exception;
 
     List<CustomerDTO> findAll();
+
+    CustomerDTO createNewCustomer(CustomerDTO customerDTO);
 }

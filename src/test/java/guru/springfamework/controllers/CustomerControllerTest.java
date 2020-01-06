@@ -1,7 +1,10 @@
 package guru.springfamework.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.services.CustomerService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -16,9 +19,11 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +31,7 @@ public class CustomerControllerTest {
 
     public static final long ID = 1L;
     public static final String FIRSTNAME = "gab";
+    public static final String LASTNAME = "xxx";
     @Mock
     CustomerService customerService;
 
@@ -69,8 +75,30 @@ public class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)));
+    }
+
+    @Test
+    public void createNewCustomer() throws Exception {
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setLastname(LASTNAME);
+        customerDTO.setFirstname(FIRSTNAME);
+
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("firstname",customerDTO.getFirstname());
+//        jsonObject.put("lastname",customerDTO.getLastname());
+//        String jsonString = jsonObject.toString();
+
+        String jsonString = new ObjectMapper().writeValueAsString(customerDTO);
 
 
+        when(customerService.createNewCustomer(any())).thenReturn(customerDTO);
 
+        mockMvc.perform(post("/api/v1/customers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonString)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)));
     }
 }
