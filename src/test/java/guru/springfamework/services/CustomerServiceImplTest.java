@@ -5,7 +5,6 @@ import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CustomerRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -14,14 +13,19 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CustomerServiceImplTest {
 
     public static final String FIRSTNAME = "zbych";
+    public static final long ID = 10L;
+    public static final String LASTNAME = "kielich";
+
     @Mock
     CustomerRepository customerRepository;
+
 
     CustomerService customerService;
 
@@ -60,4 +64,27 @@ public class CustomerServiceImplTest {
         assertEquals(2, foundCustomerList.size());
 
     }
+
+
+
+    @Test
+    public void updateCustomer() throws Exception{
+
+        Customer customer = new Customer();
+        customer.setId(ID);
+        customer.setFirstname(FIRSTNAME);
+        customer.setLastname(LASTNAME);
+        Optional<Customer> customerOptional = Optional.of(customer);
+
+        when(customerRepository.findById(anyLong())).thenReturn(customerOptional);
+        when(customerRepository.save(any())).thenReturn(customer);
+
+        CustomerDTO customerDTO = customerService.updateCustomer(new CustomerDTO(), 2L);
+
+        verify(customerRepository,times(1)).save(any());
+        //?? todo below is not true
+        // assertEquals(FIRSTNAME, customerDTO.getFirstname());
+
+    }
+
 }

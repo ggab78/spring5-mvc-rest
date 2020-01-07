@@ -48,4 +48,19 @@ public class CustomerServiceImpl implements CustomerService {
 
         return returnedCustomerDTO;
     }
+
+    @Override
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO, Long id) throws Exception {
+
+       return customerRepository.findById(id)
+                .map(customer -> {
+                    customer.setFirstname(customerDTO.getFirstname());
+                    customer.setLastname(customerDTO.getLastname());
+                    Customer savedCustomer = customerRepository.save(customer);
+                    CustomerDTO returnCustomerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(savedCustomer);
+                    returnCustomerDTO.setCustomerUrl("/api/v1/customers/"+returnCustomerDTO.getId());
+                    return returnCustomerDTO;
+                })
+                .orElseThrow(()-> new Exception("Customer with id "+id+" not found."));
+    }
 }

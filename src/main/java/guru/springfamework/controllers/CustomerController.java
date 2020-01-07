@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/api/v1/customers")
@@ -32,6 +34,12 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO) throws Exception{
         return new ResponseEntity<CustomerDTO>(
                 customerService.createNewCustomer(customerDTO), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO, @PathVariable("id") String id) throws Exception{
+        return new ResponseEntity<CustomerDTO>(
+                customerService.updateCustomer(customerDTO, Long.parseLong(id)), HttpStatus.ACCEPTED);
     }
 
 }
