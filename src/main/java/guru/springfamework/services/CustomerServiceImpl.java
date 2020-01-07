@@ -63,4 +63,24 @@ public class CustomerServiceImpl implements CustomerService {
                 })
                 .orElseThrow(()-> new Exception("Customer with id "+id+" not found."));
     }
+
+    @Override
+    public CustomerDTO patchCustomer(CustomerDTO customerDTO, Long id) throws Exception {
+
+        return customerRepository.findById(id)
+                .map(customer -> {
+                    if(customerDTO.getFirstname()!=null){
+                        customer.setFirstname(customerDTO.getFirstname());
+                    }
+                    if(customerDTO.getLastname()!=null){
+                        customer.setLastname(customerDTO.getLastname());
+                    }
+
+                    Customer savedCustomer = customerRepository.save(customer);
+
+                    return CustomerMapper.INSTANCE.customerToCustomerDTO(savedCustomer);
+                })
+                .orElseThrow(()-> new Exception("Customer with id "+id+" not found."));
+    }
+
 }

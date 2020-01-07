@@ -37,9 +37,15 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO, @PathVariable("id") String id) throws Exception{
+    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO, @PathVariable("id") String id) throws Exception{
         return new ResponseEntity<CustomerDTO>(
                 customerService.updateCustomer(customerDTO, Long.parseLong(id)), HttpStatus.ACCEPTED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CustomerDTO> patchCustomer(@RequestBody CustomerDTO customerDTO, @PathVariable("id") String id) throws Exception{
+        return new ResponseEntity<CustomerDTO>(
+                customerService.patchCustomer(customerDTO, Long.parseLong(id)), HttpStatus.ACCEPTED);
     }
 
 }

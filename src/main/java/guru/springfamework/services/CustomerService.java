@@ -14,4 +14,6 @@ public interface CustomerService {
 
     CustomerDTO updateCustomer(CustomerDTO customerDTO, Long id) throws Exception;
 
+    CustomerDTO patchCustomer(CustomerDTO customerDTO, Long id) throws Exception;
+
 }
