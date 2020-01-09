@@ -54,7 +54,7 @@ public class CustomerControllerTest {
         List<CustomerDTO> customerDTOList = Arrays.asList(customerDTO, new CustomerDTO());
         when(customerService.findAll()).thenReturn(customerDTOList);
 
-        mockMvc.perform(get("/api/v1/customers/")
+        mockMvc.perform(get(CustomerController.BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(2)));
@@ -70,7 +70,7 @@ public class CustomerControllerTest {
 
         when(customerService.findById(anyLong())).thenReturn(customerDTO);
 
-        mockMvc.perform(get("/api/v1/customers/1")
+        mockMvc.perform(get(CustomerController.BASE_URL+"/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)));
@@ -93,7 +93,7 @@ public class CustomerControllerTest {
 
         when(customerService.createNewCustomer(any())).thenReturn(customerDTO);
 
-        mockMvc.perform(post("/api/v1/customers")
+        mockMvc.perform(post(CustomerController.BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonString)
                 )
@@ -116,7 +116,7 @@ public class CustomerControllerTest {
 
         when(customerService.updateCustomer(any(), anyLong())).thenReturn(customerDTO);
 
-        mockMvc.perform(put("/api/v1/customers/1")
+        mockMvc.perform(put(CustomerController.BASE_URL+"/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonString)
         )
@@ -128,7 +128,7 @@ public class CustomerControllerTest {
     @Test
     public void deleteCustomer() throws Exception {
 
-        mockMvc.perform(delete("/api/v1/customers/1")
+        mockMvc.perform(delete(CustomerController.BASE_URL+"/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk());
