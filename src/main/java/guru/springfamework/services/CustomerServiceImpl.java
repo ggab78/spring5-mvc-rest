@@ -31,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(customer -> {
                     CustomerDTO customerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(customer);
-                    customerDTO.setCustomerUrl(CustomerController.BASE_URL+"/"+customer.getId());
+                    customerDTO.setCustomerUrl(getCustomerUrl(customer.getId()));
                     return customerDTO;
                 })
                 .collect(Collectors.toList());
@@ -45,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer savedCustomer = customerRepository.save(customer);
 
         CustomerDTO returnedCustomerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(savedCustomer);
-        returnedCustomerDTO.setCustomerUrl(CustomerController.BASE_URL+"/"+returnedCustomerDTO.getId());
+        returnedCustomerDTO.setCustomerUrl(getCustomerUrl(returnedCustomerDTO.getId()));
 
         return returnedCustomerDTO;
     }
@@ -59,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
                     customer.setLastname(customerDTO.getLastname());
                     Customer savedCustomer = customerRepository.save(customer);
                     CustomerDTO returnCustomerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(savedCustomer);
-                    returnCustomerDTO.setCustomerUrl(CustomerController.BASE_URL+"/"+returnCustomerDTO.getId());
+                    returnCustomerDTO.setCustomerUrl(getCustomerUrl(returnCustomerDTO.getId()));
                     return returnCustomerDTO;
                 })
                 .orElseThrow(()-> new Exception("Customer with id "+id+" not found."));
@@ -87,6 +87,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomerById(Long id) {
         customerRepository.deleteById(id);
+    }
+
+
+    private String getCustomerUrl(Long id){
+        return CustomerController.BASE_URL+"/"+id;
     }
 
 }
