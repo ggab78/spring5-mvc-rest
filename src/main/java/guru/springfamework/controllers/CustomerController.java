@@ -9,13 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/api/v1/customers")
+@RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
 
+
+    public static final String BASE_URL="/api/v1/customers";
     private CustomerService customerService;
 
     @GetMapping

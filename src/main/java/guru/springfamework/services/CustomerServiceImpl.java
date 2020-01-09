@@ -2,6 +2,7 @@ package guru.springfamework.services;
 
 import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.model.CustomerDTO;
+import guru.springfamework.controllers.CustomerController;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CustomerRepository;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(customer -> {
                     CustomerDTO customerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(customer);
-                    customerDTO.setCustomerUrl("/api/v1/customers/"+customer.getId());
+                    customerDTO.setCustomerUrl(CustomerController.BASE_URL+"/"+customer.getId());
                     return customerDTO;
                 })
                 .collect(Collectors.toList());
@@ -44,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer savedCustomer = customerRepository.save(customer);
 
         CustomerDTO returnedCustomerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(savedCustomer);
-        returnedCustomerDTO.setCustomerUrl("/api/v1/customers/"+returnedCustomerDTO.getId());
+        returnedCustomerDTO.setCustomerUrl(CustomerController.BASE_URL+"/"+returnedCustomerDTO.getId());
 
         return returnedCustomerDTO;
     }
@@ -58,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
                     customer.setLastname(customerDTO.getLastname());
                     Customer savedCustomer = customerRepository.save(customer);
                     CustomerDTO returnCustomerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(savedCustomer);
-                    returnCustomerDTO.setCustomerUrl("/api/v1/customers/"+returnCustomerDTO.getId());
+                    returnCustomerDTO.setCustomerUrl(CustomerController.BASE_URL+"/"+returnCustomerDTO.getId());
                     return returnCustomerDTO;
                 })
                 .orElseThrow(()-> new Exception("Customer with id "+id+" not found."));
