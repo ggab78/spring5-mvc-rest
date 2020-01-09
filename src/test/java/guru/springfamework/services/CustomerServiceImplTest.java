@@ -37,7 +37,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void findById() throws Exception{
+    public void findById() throws Exception {
         Customer customer = new Customer();
         customer.setId(1L);
         customer.setFirstname(FIRSTNAME);
@@ -55,7 +55,7 @@ public class CustomerServiceImplTest {
     @Test
     public void findAll() {
 
-        List<Customer> customerList= Arrays.asList(new Customer(), new Customer());
+        List<Customer> customerList = Arrays.asList(new Customer(), new Customer());
 
         when(customerRepository.findAll()).thenReturn(customerList);
 
@@ -66,9 +66,8 @@ public class CustomerServiceImplTest {
     }
 
 
-
     @Test
-    public void updateCustomer() throws Exception{
+    public void updateCustomer() throws Exception {
 
         Customer customer = new Customer();
         customer.setId(ID);
@@ -81,10 +80,17 @@ public class CustomerServiceImplTest {
 
         CustomerDTO customerDTO = customerService.updateCustomer(new CustomerDTO(), 2L);
 
-        verify(customerRepository,times(1)).save(any());
+        verify(customerRepository, times(1)).save(any());
         //?? todo below is not true
         // assertEquals(FIRSTNAME, customerDTO.getFirstname());
 
+    }
+
+    @Test
+    public void deleteCustomer() {
+
+        customerService.deleteCustomerById(ID);
+        verify(customerRepository, times(1)).deleteById(anyLong());
     }
 
 }

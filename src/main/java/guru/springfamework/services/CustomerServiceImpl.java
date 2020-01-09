@@ -83,4 +83,9 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(()-> new Exception("Customer with id "+id+" not found."));
     }
 
+    @Override
+    public void deleteCustomerById(Long id) {
+        customerRepository.deleteById(id);
+    }
+
 }

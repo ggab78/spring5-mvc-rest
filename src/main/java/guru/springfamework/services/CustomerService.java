@@ -16,4 +16,6 @@ public interface CustomerService {
 
     CustomerDTO patchCustomer(CustomerDTO customerDTO, Long id) throws Exception;
 
+    void deleteCustomerById(Long id);
+
 }
