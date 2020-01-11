@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerRepository.findById(id)
                 .map(CustomerMapper.INSTANCE::customerToCustomerDTO)
-                .orElseThrow(()-> new Exception("User Id "+id+" can not be found."));
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
                     returnCustomerDTO.setCustomerUrl(getCustomerUrl(returnCustomerDTO.getId()));
                     return returnCustomerDTO;
                 })
-                .orElseThrow(()-> new Exception("Customer with id "+id+" not found."));
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
 
                     return CustomerMapper.INSTANCE.customerToCustomerDTO(savedCustomer);
                 })
-                .orElseThrow(()-> new Exception("Customer with id "+id+" not found."));
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override

@@ -3,6 +3,7 @@ package guru.springfamework.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.services.CustomerService;
+import guru.springfamework.services.ResourceNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -42,7 +43,9 @@ public class CustomerControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
@@ -62,7 +65,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void getCategoryByName() throws Exception {
+    public void getCustomerById() throws Exception {
 
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setId(ID);
@@ -134,6 +137,21 @@ public class CustomerControllerTest {
                 .andExpect(status().isOk());
 
         verify(customerService, times(1)).deleteCustomerById(anyLong());
+
+    }
+
+
+    @Test
+    public void getCustomerByIdNotFound() throws Exception {
+
+        when(customerService.findById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.BASE_URL+"/9999")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isNotFound());
+
+        verify(customerService, times(1)).findById(anyLong());
 
     }
 }

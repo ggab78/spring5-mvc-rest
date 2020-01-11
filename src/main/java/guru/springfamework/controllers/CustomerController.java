@@ -26,7 +26,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerDTO> getCategoryByName(@PathVariable("id") String id) throws Exception{
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable("id") String id) throws Exception{
         return new ResponseEntity<CustomerDTO>(
                 customerService.findById(Long.parseLong(id)), HttpStatus.OK);
     }
