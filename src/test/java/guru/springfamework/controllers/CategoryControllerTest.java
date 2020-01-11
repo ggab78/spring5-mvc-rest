@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -53,9 +52,9 @@ public class CategoryControllerTest {
 
         when(categoryService.findAll()).thenReturn(categories);
 
-        ResponseEntity<CategoryListDTO> responseEntity = categoryController.getAllCategories();
+        CategoryListDTO categoryListDTO = categoryController.getAllCategories();
 
-        assertEquals(2, responseEntity.getBody().getCategories().size());
+        assertEquals(2, categoryListDTO.getCategories().size());
 
         mockMvc.perform(get("/api/v1/categories/")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -73,9 +72,9 @@ public class CategoryControllerTest {
 
         when(categoryService.findByName(anyString())).thenReturn(categoryDTO);
 
-        ResponseEntity<CategoryDTO> responseEntity = categoryController.getCategoryByName(NAME);
+        CategoryDTO foundCategoryDTO = categoryController.getCategoryByName(NAME);
 
-        assertEquals(NAME, responseEntity.getBody().getName());
+        assertEquals(NAME, foundCategoryDTO.getName());
 
         mockMvc.perform(get("/api/v1/categories/Jim")
                 .contentType(MediaType.APPLICATION_JSON))
